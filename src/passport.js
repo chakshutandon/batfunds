@@ -1,22 +1,28 @@
-var localStrategy = require('passport-local').Strategy
+const localStrategy = require('passport-local').Strategy
+const db = require('./database.js').db
+const Sequelize = require('./database.js').Sequelize
 
-// TODO: REMOVE
-var user = {'id': 1, 'username': 'chakshutandon', 'password':'1234'}
+const userSchema = require('./schemas/user.js')(db, Sequelize)
 
 module.exports = function(passport) {
 
     passport.use('localLogin', new localStrategy( function(username, password, callback) {
-        // TODO: Verify credentials with Database and pass through callback. 
-        // callback(null, false) <--> User does not exist or invalid credentials
-        callback(null, user)
+        userSchema.findOne({where:{email: username}}).then(user => {
+            if (!user) return callback(null, false)
+            if (user.password != password) return callback(null, false)
+            return callback(null, user)
+        }).catch(function(err) {
+            return callback(err)
+        })
     }))
 
     passport.serializeUser(function(user, callback) {
-        callback(null, user.id)
+        callback(null, user.uid)
     })
       
     passport.deserializeUser(function(id, callback) {
-        // TODO: Get user from id and pass through callback
-        callback(null, user)
+        userSchema.findOne({where:{uid: id}}).then(result => {
+            callback(null, result)
+        })
     })
 }
