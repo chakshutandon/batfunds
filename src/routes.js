@@ -1,29 +1,36 @@
 module.exports = function(app, passport) {
 
+    var path = require('path')
     const db = require('./database.js').db
     const Sequelize = require('./database.js').Sequelize
+    var bcrypt   = require('bcrypt-nodejs');
 
     app.get('/', function(req, res) {
-        res.send("Home")
+        res.sendFile(path.join(__dirname + '/views/index.html'))
     })
 
     app.get('/login', function(req, res) {
-        res.send("Login")
+        res.sendFile(path.join(__dirname + '/views/login.html'))
     })
 
     app.post('/login', passport.authenticate('localLogin', {
         successRedirect: '/protected',
-        failureRedirect: '/login'
-        // flash messages
+        failureRedirect: '/login?code=-1'
     }))
 
+    app.get('/getCurrentUser', function(req, res) {
+        user = req.user
+        if (user) delete user[password]
+        res.json(req.user)
+    })
+
     app.get('/signup', function(req, res) {
-        res.send("Signup")
+        res.sendFile(path.join(__dirname + '/views/signup.html'))
     })
 
     app.post('/signup', function(req, res) {
         const email = req.body.email
-        const password = req.body.password
+        const password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8), null);
         const first_name = req.body.first_name
         const last_name = req.body.last_name
         const phone = req.body.phone
@@ -39,23 +46,21 @@ module.exports = function(app, passport) {
             password: password, 
             verified: 1
         }).then(user => {
-            // redirect and flash message
-            res.redirect('/login')
+            res.redirect('/login?code=1')
         }).catch(Sequelize.ValidationError, (err) => {
-            // flash message
-            res.redirect('/signup')
+            res.redirect('/signup?code=-2')
         }).catch(Sequelize.DatabaseError, (err) => {
             console.log(err)
         })
     })
 
     app.get('/protected', isLoggedIn, function(req, res) {
-        res.send(req.user.email + " has been successfully logged in!")
+        res.sendFile(path.join(__dirname + '/views/protected.html'))
     })
 
     app.get('/logout', function(req, res) {
         req.logout()
-        res.redirect('/')
+        res.redirect('/login?code=2')
     })
 }
 

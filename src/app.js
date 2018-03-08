@@ -1,13 +1,15 @@
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 80
 
 var express = require('express')
 var app = express()
 var passport = require('passport')
+var path = require('path')
 
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
 var session = require('express-session')
 
+app.use(express.static(path.join(__dirname, 'public')));
 require('./passport.js')(passport)
 
 app.use(cookieParser())
