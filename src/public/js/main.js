@@ -21,7 +21,7 @@
                 showErrorDialog("Incorrect Email or Password!", "#F44336")
                 break;
             case '-2':
-                showErrorDialog("Email already exists! Did you mean to <a class='snackbarLink' href='/login'>log in</a>?", "#F44336")
+                showErrorDialog("Email already exists! Did you mean to <a class='text-white text-hov-white text-underline' href='/login'>log in</a>?", "#F44336")
                 break;
             case '1':
                 showErrorDialog("Your account has been created! Please log in to continue.", "#43A047")

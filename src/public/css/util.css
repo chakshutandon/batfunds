@@ -2236,6 +2236,10 @@
 .text-up {text-transform: uppercase;}
 
 /* ------------------------------------ */
+.text-underline {text-decoration: underline;}
+.text-underline:hover {text-decoration: none;}
+
+/* ------------------------------------ */
 .text-center {text-align: center;}
 .text-left {text-align: left;}
 .text-right {text-align: right;}

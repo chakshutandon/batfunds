@@ -22,6 +22,29 @@
 }
 
 /*//////////////////////////////////////////////////////////////////
+[ ANIMATIONS ]*/
+
+@-webkit-keyframes fadein {
+  from {top: 0; opacity: 0;}
+  to {top: 40px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {top: 0; opacity: 0;}
+  to {top: 40px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {top: 40px; opacity: 1;}
+  to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {top: 40px; opacity: 1;}
+  to {top: 0; opacity: 0;}
+}
+
+/*//////////////////////////////////////////////////////////////////
 [ RESTYLE TAG ]*/
 
 * {
@@ -148,7 +171,31 @@ iframe {
 }
 
 /*//////////////////////////////////////////////////////////////////
-[ login ]*/
+[ Snackbar ]*/
+
+#snackbar {
+  visibility: hidden;
+  min-width: 390px;
+  transform: translate(-50%, -0%);
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  top: 40px;
+}
+
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 3.5s;
+  animation: fadein 0.5s, fadeout 0.5s 3.5s;
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ Single Card Layout ]*/
 
 .limiter {
   width: 100%;
@@ -495,62 +542,3 @@ iframe {
     opacity: 1;
   }
 }
-
-
-/* chakshutandon */
-
-.snackbarLink {
-  color: #FFF;
-  text-decoration: underline;
-}
-.snackbarLink:hover {
-  color: #FFF;
-}
-
-#snackbar {
-  visibility: hidden;
-  min-width: 390px;
-  transform: translate(-50%, -0%);
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 2px;
-  padding: 16px;
-  position: fixed;
-  z-index: 1;
-  left: 50%;
-  top: 40px;
-}
-
-#snackbar.show {
-  visibility: visible; /* Show the snackbar */
-
-/* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-However, delay the fade out process for 2.5 seconds */
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 3.5s;
-  animation: fadein 0.5s, fadeout 0.5s 3.5s;
-}
-
-/* Animations to fade the snackbar in and out */
-@-webkit-keyframes fadein {
-  from {top: 0; opacity: 0;}
-  to {top: 40px; opacity: 1;}
-}
-
-@keyframes fadein {
-  from {top: 0; opacity: 0;}
-  to {top: 40px; opacity: 1;}
-}
-
-@-webkit-keyframes fadeout {
-  from {top: 40px; opacity: 1;}
-  to {top: 0; opacity: 0;}
-}
-
-@keyframes fadeout {
-  from {top: 40px; opacity: 1;}
-  to {top: 0; opacity: 0;}
-}
-
-
-
