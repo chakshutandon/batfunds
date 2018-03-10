@@ -1,5 +1,5 @@
-module.exports = function (db, Sequelize) {
-    return User = db.define('user', {
+module.exports = function(db, Sequelize) {
+    return db.define('user', {
         uid: {
             type: Sequelize.UUID,
             defaultValue: Sequelize.UUIDV1,

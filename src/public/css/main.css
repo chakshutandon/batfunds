@@ -1,7 +1,3 @@
-
-
-
-
 /*//////////////////////////////////////////////////////////////////
 [ FONT ]*/
 
@@ -24,9 +20,6 @@
   font-family: Poppins-SemiBold;
   src: url('../fonts/poppins/Poppins-SemiBold.ttf'); 
 }
-
-
-
 
 /*//////////////////////////////////////////////////////////////////
 [ RESTYLE TAG ]*/
@@ -214,6 +207,8 @@ iframe {
 .login100-form-title i {
   font-size: 60px;
 }
+
+/* chakshutandon */
 
 #userDetails {
   display: block;
@@ -500,6 +495,9 @@ iframe {
     opacity: 1;
   }
 }
+
+
+/* chakshutandon */
 
 .snackbarLink {
   color: #FFF;
