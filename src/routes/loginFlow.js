@@ -1,8 +1,16 @@
 const bcrypt = require('../utils/bcrypt.js')
 
+function loggedIn(req, res, next) {
+    if (req.user) {
+        res.redirect('/protected');
+    } else {
+        next();
+    }
+}
+
 module.exports = function(path, app, dbClass, passport) {
 
-    app.get('/login', function(req, res) {
+    app.get('/login', loggedIn, function(req, res) {
         res.sendFile(path.join(__dirname + '/../views/login.html'))
     })
 
@@ -11,7 +19,7 @@ module.exports = function(path, app, dbClass, passport) {
         failureRedirect: '/login?code=-1'
     }))
 
-    app.get('/signup', function(req, res) {
+    app.get('/signup', loggedIn, function(req, res) {
         res.sendFile(path.join(__dirname + '/../views/signup.html'))
     })
 
