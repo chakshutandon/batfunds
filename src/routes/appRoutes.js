@@ -15,7 +15,7 @@ module.exports = function(router, dbClass) {
             })
         });
 
-    router.route('/groups/')                                                                    // Whoever creates the group is also in it
+    router.route('/groups/')                                                                    // Whoever creates the group is also in it... get this from req.user
         .post(function(req, res) {
             var name = req.body.name;
             var desc = req.body.desc;
@@ -64,6 +64,7 @@ module.exports = function(router, dbClass) {
             }).then(function (groups) {
                 if(!groups) {
                     res.status(404).json({success: 0, error: "Error finding groups for user."});
+                    return;
                 }
                 res.json({success: 1, groups: groups});
             })
@@ -80,6 +81,7 @@ module.exports = function(router, dbClass) {
             }).then(function (users) {
                 if(!users) {
                     res.status(404).json({success: 0, error: "Error finding users for group."});
+                    return;
                 }
                 res.json({success: 1, users: users});
             })
