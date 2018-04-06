@@ -4,7 +4,7 @@ var bcrypt   = require('./bcrypt.js')
 module.exports = function(passport, dbClass) {
 
     passport.use('localLogin', new localStrategy( function(username, password, callback) {
-        dbClass.users.findOne({where:{[dbClass.Sequelize.Op.or]: [{email: username}, {phone: username}]}}).then(user => {
+        dbClass.users.findOne({where:{[dbClass.Sequelize.Op.or]: [{email: username}, {username: username}]}}).then(user => {
             if (!user) return callback(null, false)
             if (!bcrypt.compare(password, user.password)) return callback(null, false)
             return callback(null, user)

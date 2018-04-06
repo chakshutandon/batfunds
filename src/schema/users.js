@@ -7,8 +7,9 @@ module.exports = function(db, Sequelize) {
         },
         first_name: Sequelize.STRING,
         last_name: Sequelize.STRING,
-        phone: Sequelize.STRING,
         email: Sequelize.STRING,
+        username: Sequelize.STRING,
+        phone: Sequelize.STRING,
         password: Sequelize.STRING,
         verified: Sequelize.BOOLEAN
     })

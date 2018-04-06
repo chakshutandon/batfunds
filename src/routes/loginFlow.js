@@ -18,6 +18,7 @@ module.exports = function(path, app, dbClass, passport) {
     app.post('/signup', function(req, res) {
 
         const email = req.body.email
+        const username = req.body.username
         const password = bcrypt.hash(req.body.password)
         const first_name = req.body.first_name
         const last_name = req.body.last_name
@@ -26,15 +27,17 @@ module.exports = function(path, app, dbClass, passport) {
         dbClass.users.create({
             first_name: first_name,
             last_name: last_name,
-            phone: phone,
             email: email,
+            username: username,
+            phone: phone,
             password: password, 
             verified: 1
         }).then(user => {
             res.redirect('/login?code=1')
         }).catch(dbClass.Sequelize.ValidationError, (err) => {
-            res.redirect('/signup?code=-2')
-            console.log(err)
+            if (err.errors[0].path == 'email_UNIQUE') res.redirect('/signup?code=-2')
+            if (err.errors[0].path == 'username_UNIQUE') res.redirect('/signup?code=-3')
+            console.log("Validation Error: " + err)
         }).catch(dbClass.Sequelize.DatabaseError, (err) => {
             res.send("Database Error: " + err)
             console.log(err)

@@ -23,6 +23,9 @@
             case '-2':
                 showErrorDialog("Email already exists! Did you mean to <a class='text-white text-hov-white text-underline' href='/login'>log in</a>?", "#F44336")
                 break;
+            case '-3':
+                showErrorDialog("Username already exists! Did you mean to <a class='text-white text-hov-white text-underline' href='/login'>log in</a>?", "#F44336")
+                break;
             case '1':
                 showErrorDialog("Your account has been created! Please log in to continue.", "#43A047")
                 break;
@@ -75,7 +78,7 @@
     function validate (input) {
         //invalid Email
         if($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
-            if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
+            if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.\+]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
                 return false;
             }
         }
