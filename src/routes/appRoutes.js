@@ -61,10 +61,11 @@ module.exports = function(router, dbClass) {
             var uid = "00183c53-b9da-38ed-abbf-4648cc9d7ea9"
 
             var groups = dbClass.usersgroups.findAll({
-                where: {
-                    uid: uid
-                }
-            }).then(function (groups) {
+                    where: {
+                        uid: uid,
+                    }
+            })
+            .then(function (groups) {
                 if(!groups) {
                     res.status(404).json({success: 0, error: "Error finding groups for user."});
                     return;
