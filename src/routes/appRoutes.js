@@ -55,8 +55,11 @@ module.exports = function(router, dbClass) {
     router.route('/user/groups/')
         .get(function(req, res) {
             res.setHeader('Content-Type', 'application/json');
-            if (req.user) uid = req.user.dataValues.uid;                                    // only allowed to see your own groups. Check if logged in.
-            else res.redirect('/login')
+            // if (req.user) var uid = req.user.dataValues.uid;                                    // only allowed to see your own groups. Check if logged in.
+            // else res.redirect('/login')
+
+            var uid = "00183c53-b9da-38ed-abbf-4648cc9d7ea9"
+
             var groups = dbClass.usersgroups.findAll({
                 where: {
                     uid: req.params.userId
