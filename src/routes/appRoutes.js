@@ -62,7 +62,7 @@ module.exports = function(router, dbClass) {
 
             var groups = dbClass.usersgroups.findAll({
                 where: {
-                    uid: req.params.userId
+                    uid: uid
                 }
             }).then(function (groups) {
                 if(!groups) {
