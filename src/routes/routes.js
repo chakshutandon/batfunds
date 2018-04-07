@@ -7,7 +7,7 @@ module.exports = function(path, app, dbClass, passport, router) {
 
     app.get('/', function(req, res) {
         if (req.user) {
-            res.redirect('/protected');
+            res.redirect('/app');
             return;
         }
         res.sendFile(path.join(__dirname + '/../views/index.html'))
@@ -22,8 +22,8 @@ module.exports = function(path, app, dbClass, passport, router) {
     require('./loginFlow.js')(path, app, dbClass, passport)
     require('./appRoutes.js')(router, dbClass)
 
-    app.get('/protected', isLoggedIn, function(req, res) {
-        res.sendFile(path.join(__dirname + '/../views/protected.html'))
+    app.get('/app', isLoggedIn, function(req, res) {
+        res.sendFile(path.join(__dirname + '/../views/app.html'))
     })
 
 }

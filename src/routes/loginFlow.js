@@ -2,7 +2,7 @@ const bcrypt = require('../utils/bcrypt.js')
 
 function loggedIn(req, res, next) {
     if (req.user) {
-        res.redirect('/protected');
+        res.redirect('/app');
     } else {
         next();
     }
@@ -15,7 +15,7 @@ module.exports = function(path, app, dbClass, passport) {
     })
 
     app.post('/login', passport.authenticate('localLogin', {
-        successRedirect: '/protected',
+        successRedirect: '/app',
         failureRedirect: '/login?code=-1'
     }))
 

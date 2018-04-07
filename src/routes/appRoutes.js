@@ -76,17 +76,24 @@ module.exports = function(router, dbClass) {
                 res.redirect('/login');
                 return;
             }
-            var groups = dbClass.usersgroups.findAll({
+            dbClass.users.find({
                 where: {
                     uid: req.user.dataValues.uid
                 }
-            }).then(function (groups) {
-                if(!groups) {
-                    res.status(404).json({success: 0, error: "Error finding groups for user."});
-                    return;
-                }
-                res.json({success: 1, groups: groups});
+            }).then((user) => {
+                user.getGroups()
+                .then((groups) => {
+                    if(!groups) {
+                        res.status(404).json({success: 0, error: "Error finding groups for user."});
+                        return;
+                    }
+                    res.json({success: 1, groups: groups});
+                });
             })
+            .catch(dbClass.Sequelize.DatabaseError, (err) => {
+                res.status(500).json({success: 0, error: "Database Error: " + err});
+                console.log(err)
+            });
         });
 
     router.route('/groups/:groupId/users/')
