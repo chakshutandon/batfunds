@@ -6,7 +6,10 @@ function isLoggedIn(req, res, next) {
 module.exports = function(path, app, dbClass, passport, router) {
 
     app.get('/', function(req, res) {
-        if (req.user) res.redirect('/protected')
+        if (req.user) {
+            res.redirect('/protected');
+            return;
+        }
         res.sendFile(path.join(__dirname + '/../views/index.html'))
     })
 
