@@ -13,9 +13,21 @@ db.authenticate().then(() => {
     console.error('Unable to connect to the database:', err)
 })
 
-const users = require('../schema/users.js')(db, Sequelize);
-const groups = require('../schema/groups.js')(db,Sequelize);
-const usersgroups = require('../schema/usersgroups.js')(db, Sequelize);
+var users = require('../schema/users.js')(db, Sequelize);
+var groups = require('../schema/groups.js')(db,Sequelize);
+var usersgroups = require('../schema/usersgroups.js')(db, Sequelize);
+
+users.belongsToMany(groups, {through: usersgroups, foreignKey: 'uid'});
+groups.belongsToMany(users, {through: usersgroups, foreignKey: 'gid'});
+usersgroups.belongsTo(users, {foreignKey: 'uid'});
+usersgroups.belongsTo(groups, {foreignKey: 'gid'});
+//usersgroups.belongsTo(users, {foreignKey: 'uid'});
+//usersgroups.belongsTo(groups, {foreignKey: 'gid'});
+//users.hasMany(groups, {joinTableName: 'users_groups', foreignKey: 'gid'})
+//groups.hasMany(users, {joinTableName: 'users_groups', foreignKey: 'uid'})
+
+//users.hasMany(groups, {through: 'usersgroups', foreignKey: 'gid'})
+//groups.hasMany(users, {through: 'usersgroups', foreignKey: 'uid'})
 
 module.exports = {
     Sequelize: Sequelize,
