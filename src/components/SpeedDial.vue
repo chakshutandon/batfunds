@@ -16,18 +16,18 @@
         v-model="fab">
         <v-icon>more_vert</v-icon>
       </v-btn>
-
       <v-btn
         fab
         dark
         color="green"
         @click.native.stop="showAddMemberDialog = true">
-        <v-icon>add</v-icon>
+        <v-icon>person_add</v-icon>
       </v-btn>
       <v-btn
         fab
         dark
-        color="orange ">
+        color="orange"
+        @click.native.stop="showRaisePaymentDialog = true">
         <v-icon>flag</v-icon>
       </v-btn>
       <v-btn
@@ -42,6 +42,10 @@
       @close="showAddMemberDialog = false"
       :show="showAddMemberDialog">
     </addMemberDialog>
+    <raisePaymentDialog
+      @close="showRaisePaymentDialog = false"
+      :show="showRaisePaymentDialog">
+    </raisePaymentDialog>
     <exitGroupDialog
       @close="showExitDialog = false"
       :show="showExitDialog">
@@ -51,12 +55,14 @@
 
 <script>
 import addMemberDialog from '@/components/AddMemberDialog';
+import raisePaymentDialog from '@/components/RaisePaymentDialog';
 import exitGroupDialog from '@/components/ExitGroupDialog';
 
 export default {
   data() {
     return {
       showAddMemberDialog: false,
+      showRaisePaymentDialog: false,
       showExitDialog: false,
     };
   },
@@ -64,6 +70,7 @@ export default {
   ],
   components: {
     addMemberDialog,
+    raisePaymentDialog,
     exitGroupDialog,
   },
 };

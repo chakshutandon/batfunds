@@ -12,12 +12,15 @@
         v-for="group in groups"
         v-bind:key="group.name"
         :groupName="group.name"
+        :groupDesc="group.description"
         :showBadge="group.isBadgeVisable"></groupNavigationItem>
     </v-list>
+    {{httpData}}
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import groupNavigationItem from '@/components/GroupNavigationItem';
 
 export default {
@@ -25,15 +28,21 @@ export default {
   },
   data() {
     return {
-      groups: [
-        { name: 'Group 1', isBadgeVisable: true },
-        { name: 'Group 2', isBadgeVisable: false },
-        { name: 'Group 3', isBadgeVisable: true },
-        { name: 'Group 4', isBadgeVisable: false },
-        { name: 'Group 5', isBadgeVisable: false },
-        { name: 'Group 6', isBadgeVisable: false },
-      ],
+      groups: [],
     };
+  },
+  mounted() {
+    axios.get('http://batfunds.herokuapp.com/api/user/groups').then((getUserGroups) => {
+      if (getUserGroups.data && getUserGroups.data.success === 1) {
+        getUserGroups.data.groups.forEach((group) => {
+          axios.get(`http://batfunds.herokuapp.com/api/groups/${group.gid}`).then((getGroupDetails) => {
+            if (getGroupDetails.data && getGroupDetails.data.success === 1) {
+              this.groups.push(getGroupDetails.data.group);
+            }
+          });
+        }, this);
+      }
+    });
   },
   components: {
     groupNavigationItem,
