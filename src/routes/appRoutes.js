@@ -1,3 +1,5 @@
+var uid = "00529a96-e599-3fba-8424-2f7243abd6cc";
+
 module.exports = function(router, dbClass) {
     router.route('/groups/:groupId')
         .get(function(req, res) {
@@ -17,12 +19,12 @@ module.exports = function(router, dbClass) {
 
     router.route('/groups/')         // Whoever creates the group is also in it... get this from req.user DONE
         .post(function(req, res) {
-            var uid;
-            if (req.user) uid = req.user.dataValues.uid;
-            else {
-                res.redirect('/login');
-                return;
-            }
+            // var uid;
+            // if (req.user) uid = req.user.dataValues.uid;
+            // else {
+            //     res.redirect('/login');
+            //     return;
+            // }
             var name = req.body.name;
             var desc = req.body.desc;
             if(name === undefined || desc === undefined) {
@@ -32,7 +34,7 @@ module.exports = function(router, dbClass) {
             console.log(name + ' ' + desc);
             var group = dbClass.groups.create({
                 name: name,
-                desc: desc
+                description: desc
             }).then((group) => {
                 var gid = group.dataValues.gid;
                 dbClass.usersgroups.create({
@@ -74,9 +76,7 @@ module.exports = function(router, dbClass) {
             // if (req.user) var uid = req.user.dataValues.uid;                                    // only allowed to see your own groups. Check if logged in.
             // else res.redirect('/login')
 
-            var uid = "00529a96-e599-3fba-8424-2f7243abd6cc"
-
-            dbClass.users.findAll({
+            dbClass.users.find({
                 where: {
                     uid: uid
                 }
@@ -99,12 +99,12 @@ module.exports = function(router, dbClass) {
     router.route('/groups/:groupId/users/')
         .get(function(req, res) {
             res.setHeader('Content-Type', 'application/json');
-            var uid;
-            if (req.user) uid = req.user.dataValues.uid;
-            else {
-                res.redirect('/login');
-                return;
-            }
+            // var uid;
+            // if (req.user) uid = req.user.dataValues.uid;
+            // else {
+            //     res.redirect('/login');
+            //     return;
+            // }
             var usergroup = dbClass.usersgroups.find({
                 where: {
                     uid: uid,
@@ -147,12 +147,12 @@ module.exports = function(router, dbClass) {
                 res.status(400).json({success: 0, error: "Invalid Request"});
                 return;
             }
-            var uid;
-            if (req.user) uid = req.user.dataValues.uid;
-            else {
-                res.redirect('/login');
-                return;
-            }
+            // var uid;
+            // if (req.user) uid = req.user.dataValues.uid;
+            // else {
+            //     res.redirect('/login');
+            //     return;
+            // }
             dbClass.usersgroups.find({
                 where: {
                     uid: uid,
@@ -194,11 +194,11 @@ module.exports = function(router, dbClass) {
                 res.status(400).json({success: 0, error: "Invalid Request"});
                 return;
             }
-            if (req.user) uid = req.user.dataValues.uid;
-            else {
-                res.redirect('/login');
-                return;
-            }
+            // if (req.user) uid = req.user.dataValues.uid;
+            // else {
+            //     res.redirect('/login');
+            //     return;
+            // }
             dbClass.usersgroups.find({
                 where: {
                     uid: userId,
