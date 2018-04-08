@@ -1,9 +1,13 @@
 <template>
-  <div>
-  <h1 class="title">Group 1</h1>
-  <h3 class="caption mt-2">A short and sweet group description goes here.</h3>
-
-  <personChip v-for="user in users" :key="user.name" class="mt-4 mb-3 mr-3"></personChip>
+  <div v-if="isVisible">
+  <h1 class="title">{{ group.name }}</h1>
+  <h3 class="caption mt-2">{{ group.description }}</h3>
+  <personChip
+    v-for="user in users"
+    :key="user.name"
+    :person="user"
+    class="mt-4 mb-3 mr-3">
+  </personChip>
   <v-data-table
     :headers="headers"
     :items="items"
@@ -15,11 +19,14 @@
 </template>
 
 <script>
+import { EventBus } from '../event-bus';
 import personChip from '@/components/PersonChip';
 
 export default {
   data() {
     return {
+      isVisible: false,
+      group: {},
       users: [
         { name: 'Yugant' },
         { name: 'Neel' },
@@ -36,11 +43,16 @@ export default {
       ],
     };
   },
+  mounted() {
+    EventBus.$on('updateGroupDetail', (group) => {
+      if (group) {
+        this.isVisible = true;
+        this.group = group;
+      }
+    });
+  },
   components: {
     personChip,
   },
 };
 </script>
-
-<style scoped>
-</style>

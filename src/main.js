@@ -13,6 +13,9 @@ Vue.use(Vuetify);
 Vue.use(VueAxios, axios);
 Vue.config.productionTip = false;
 
+// const EventBus = new Vue();
+// export { EventBus };
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

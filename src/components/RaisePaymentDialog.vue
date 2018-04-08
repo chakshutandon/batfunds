@@ -28,7 +28,7 @@
             label="Members"
             autocomplete></v-select>
           </v-card-text>
-           <v-chip close>John Maxwell</v-chip> 
+           <v-chip close>John Maxwell</v-chip>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>

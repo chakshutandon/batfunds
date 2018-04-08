@@ -7,7 +7,7 @@
         app
         v-model="drawer">
         <navigation></navigation>
-      </v-navigation-drawer>
+      </v-navigation-drawer>  
       <v-toolbar
         app
         :clipped-left="$vuetify.breakpoint.lgAndUp"
