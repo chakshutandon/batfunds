@@ -1,5 +1,3 @@
-var uid = "00529a96-e599-3fba-8424-2f7243abd6cc";
-
 module.exports = function(router, dbClass) {
     router.route('/groups/:groupId')
         .get(function(req, res) {
@@ -19,12 +17,11 @@ module.exports = function(router, dbClass) {
 
     router.route('/groups/')         // Whoever creates the group is also in it... get this from req.user DONE
         .post(function(req, res) {
-            // var uid;
-            // if (req.user) uid = req.user.dataValues.uid;
-            // else {
-            //     res.redirect('/login');
-            //     return;
-            // }
+            if (req.user) uid = req.user.dataValues.uid;
+            else {
+                res.redirect('/login');
+                return;
+            }
             var name = req.body.name;
             var desc = req.body.desc;
             if(name === undefined || desc === undefined) {
@@ -73,8 +70,11 @@ module.exports = function(router, dbClass) {
     router.route('/user/groups/')
         .get(function(req, res) {
             res.setHeader('Content-Type', 'application/json');
-            // if (req.user) var uid = req.user.dataValues.uid;                                    // only allowed to see your own groups. Check if logged in.
-            // else res.redirect('/login')
+            if (req.user) uid = req.user.dataValues.uid;
+            else {
+                res.redirect('/login');
+                return;
+            }
 
             dbClass.users.find({
                 where: {
@@ -99,12 +99,11 @@ module.exports = function(router, dbClass) {
     router.route('/groups/:groupId/users/')
         .get(function(req, res) {
             res.setHeader('Content-Type', 'application/json');
-            // var uid;
-            // if (req.user) uid = req.user.dataValues.uid;
-            // else {
-            //     res.redirect('/login');
-            //     return;
-            // }
+            if (req.user) uid = req.user.dataValues.uid;
+            else {
+                res.redirect('/login');
+                return;
+            }
             var usergroup = dbClass.usersgroups.find({
                 where: {
                     uid: uid,
@@ -141,18 +140,18 @@ module.exports = function(router, dbClass) {
 
     router.route('/groups/member')
         .post(function(req, res) {
+            if (req.user) uid = req.user.dataValues.uid;
+            else {
+                res.redirect('/login');
+                return;
+            }
             var username = req.body.username;   // add users by either email/username and not uid. Change query. DONE
             var gid = req.body.gid;
             if(username === undefined || gid === undefined) {
                 res.status(400).json({success: 0, error: "Invalid Request"});
                 return;
             }
-            // var uid;
-            // if (req.user) uid = req.user.dataValues.uid;
-            // else {
-            //     res.redirect('/login');
-            //     return;
-            // }
+
             dbClass.usersgroups.find({
                 where: {
                     uid: uid,
@@ -188,11 +187,11 @@ module.exports = function(router, dbClass) {
 
     router.route('/groups/member/:groupId')
         .delete(function(req, res) {                              // only allowed for groups you are in.
-            // if (req.user) uid = req.user.dataValues.uid;
-            // else {
-            //     res.redirect('/login');
-            //     return;
-            // }
+            if (req.user) uid = req.user.dataValues.uid;
+            else {
+                res.redirect('/login');
+                return;
+            }
             var groupId = req.params.groupId;
             if (groupId === undefined) {
                 res.status(400).json({success: 0, error: "Invalid Request"});
@@ -225,11 +224,11 @@ module.exports = function(router, dbClass) {
 
     router.route('/raisepayment')
         .post(function(req, res) {
-            // if (req.user) uid = req.user.dataValues.uid;
-            // else {
-            //     res.redirect('/login');
-            //     return;
-            // }
+            if (req.user) uid = req.user.dataValues.uid;
+            else {
+                res.redirect('/login');
+                return;
+            }
             var gid = req.body.gid;
             var amount = req.body.amount;
             var due = req.body.due;
@@ -267,11 +266,11 @@ module.exports = function(router, dbClass) {
     
     router.route('/paymentflags/:gid')
         .get(function(req, res) {
-            // if (req.user) uid = req.user.dataValues.uid;
-            // else {
-            //     res.redirect('/login');
-            //     return;
-            // }
+            if (req.user) uid = req.user.dataValues.uid;
+            else {
+                res.redirect('/login');
+                return;
+            }
             var gid = req.params.gid
             dbClass.usersgroups.findAll({
                 where: {
@@ -302,7 +301,8 @@ module.exports = function(router, dbClass) {
 
     router.route('/payers')
         .post(function(req, res) {
-            if (!req.user) {
+            if (req.user) uid = req.user.dataValues.uid;
+            else {
                 res.redirect('/login');
                 return;
             }
@@ -345,7 +345,8 @@ module.exports = function(router, dbClass) {
 
     router.route('/payers/:pid')
         .get(function(req, res) {
-            if (!req.user) {
+            if (req.user) uid = req.user.dataValues.uid;
+            else {
                 res.redirect('/login');
                 return;
             }
