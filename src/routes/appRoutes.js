@@ -233,7 +233,7 @@ module.exports = function(router, dbClass) {
             var gid = req.body.gid;
             var amount = req.body.amount;
             var due = req.body.due;
-            if(gid === undefined || uid === undefined || amount === undefined || due === undefined) {
+            if(gid === undefined || amount === undefined || due === undefined) {
                 res.status(400).json({success: 0, error: "Invalid Request"});
                 return;
             }
@@ -249,11 +249,11 @@ module.exports = function(router, dbClass) {
                 }
                 dbClass.paymentflags.create({
                     gid: gid,
-                    payee: payee,
+                    payee: uid,
                     amount: amount,
                     due: due
                 }).then(() => {
-                    console.log("Created payment flag: payee: " + payee + ", amount: " + amount)
+                    console.log("Created payment flag: payee: " + uid + ", amount: " + amount)
                     res.sendStatus(201);
                 }).catch(dbClass.Sequelize.DatabaseError, (err) => {
                     res.status(400).send("Database Error: " + err)
