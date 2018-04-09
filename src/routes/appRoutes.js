@@ -186,22 +186,21 @@ module.exports = function(router, dbClass) {
             })
         });
 
-    router.route('/groups/member/:userId/:groupId')
+    router.route('/groups/member/:groupId')
         .delete(function(req, res) {                              // only allowed for groups you are in.
-            var userId = req.params.userId;
-            var groupId = req.params.groupId;
-            if(userId === undefined || groupId === undefined) {
-                res.status(400).json({success: 0, error: "Invalid Request"});
-                return;
-            }
             // if (req.user) uid = req.user.dataValues.uid;
             // else {
             //     res.redirect('/login');
             //     return;
             // }
+            var groupId = req.params.groupId;
+            if (groupId === undefined) {
+                res.status(400).json({success: 0, error: "Invalid Request"});
+                return;
+            }
             dbClass.usersgroups.find({
                 where: {
-                    uid: userId,
+                    uid: uid,
                     gid: groupId
                 }
             }).then((usergroup) => {
@@ -211,11 +210,11 @@ module.exports = function(router, dbClass) {
                 }
                 dbClass.usersgroups.destroy({
                     where: {
-                        uid : userId,
+                        uid : uid,
                         gid : groupId
                     }
                 }).then(() => {
-                    res.status(200).json({success: 1, message: "Successfully removed " + userId + " from group " + groupId});
+                    res.status(200).json({success: 1, message: "Successfully removed " + uid + " from group " + groupId});
                 })
             })
             .catch(dbClass.Sequelize.DatabaseError, (err) => {
