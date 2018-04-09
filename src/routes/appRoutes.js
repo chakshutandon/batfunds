@@ -186,10 +186,11 @@ module.exports = function(router, dbClass) {
             })
         });
 
-    router.route('/groups/member/:groupId')
+    router.route('/groups/member/:userId/:groupId')
         .delete(function(req, res) {                              // only allowed for groups you are in.
+            var userId = req.params.userId;
             var groupId = req.params.groupId;
-            if(groupId === undefined) {
+            if(userId === undefined || groupId === undefined) {
                 res.status(400).json({success: 0, error: "Invalid Request"});
                 return;
             }
