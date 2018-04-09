@@ -16,11 +16,18 @@ db.authenticate().then(() => {
 var users = require('../schema/users.js')(db, Sequelize);
 var groups = require('../schema/groups.js')(db,Sequelize);
 var usersgroups = require('../schema/usersgroups.js')(db, Sequelize);
+var payers = require('../schema/payers.js')(db, Sequelize);
+var paymentflags = require('../schema/paymentflags.js')(db, Sequelize);
 
 users.belongsToMany(groups, {through: usersgroups, foreignKey: 'uid'});
 groups.belongsToMany(users, {through: usersgroups, foreignKey: 'gid'});
 usersgroups.belongsTo(users, {foreignKey: 'uid'});
 usersgroups.belongsTo(groups, {foreignKey: 'gid'});
+paymentflags.belongsTo(users, {foreignKey: 'payee'});
+paymentflags.belongsTo(groups, {foreignKey: 'gid'});
+payers.belongsTo(users, {foreignKey: 'uid'});
+payers.belongsTo(groups, {foreignKey: 'gid'});
+payers.belongsTo(paymentflags, {foreignKey: 'pid'});
 //usersgroups.belongsTo(users, {foreignKey: 'uid'});
 //usersgroups.belongsTo(groups, {foreignKey: 'gid'});
 //users.hasMany(groups, {joinTableName: 'users_groups', foreignKey: 'gid'})
@@ -34,5 +41,7 @@ module.exports = {
     db: db,
     users: users,
     groups: groups,
-    usersgroups: usersgroups
+    usersgroups: usersgroups,
+    payers: payers,
+    paymentflags: paymentflags
 }
