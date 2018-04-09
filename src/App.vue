@@ -16,6 +16,25 @@
             <v-icon>menu</v-icon>
           </v-btn>
           <h1 class="title">Batfunds</h1>
+          <v-spacer></v-spacer>
+          <v-toolbar-items class="hidden-sm-and-down">
+
+          <v-menu bottom offset-y>
+            <v-btn flat slot="activator">
+              <v-icon>person</v-icon>
+            </v-btn>
+            <v-list>
+            <v-list-tile>
+            <v-list-tile-content>
+            <v-btn flat href="/logout">
+              <v-list-tile-title>Logout</v-list-tile-title>
+              </v-btn>
+              </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
+          </v-menu>
+
+          </v-toolbar-items>
       </v-toolbar>
       <v-content>
         <v-container fluid>

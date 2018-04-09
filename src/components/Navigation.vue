@@ -26,36 +26,20 @@
 import axios from 'axios';
 import addGroupDialog from '@/components/AddGroupDialog';
 import groupNavigationItem from '@/components/GroupNavigationItem';
-import { EventBus } from '../event-bus';
 
 export default {
   data: function () {
     return {
       showAddGroupDialog: false,
-      groups: [{}],
     };
   },
-  mounted: function () {
-    this.renderNavigation();
-    EventBus.$on('updateNavigation', () => {
-      this.renderNavigation();
-    });
-  },
-  methods: {
-    renderNavigation: function () {
-      this.groups = [];
-      axios.get('http://batfunds.herokuapp.com/api/user/groups').then((getUserGroups) => {
-        if (getUserGroups.data && getUserGroups.data.success === 1) {
-          getUserGroups.data.groups.forEach((group) => {
-            axios.get(`http://batfunds.herokuapp.com/api/groups/${group.gid}`).then((getGroupDetails) => {
-              if (getGroupDetails.data && getGroupDetails.data.success === 1) {
-                this.groups.push(getGroupDetails.data.group);
-              }
-            });
-          });
-        }
-      });
+  computed: {
+    groups() {
+      return this.$store.state.groups
     },
+  },
+  mounted: function() {
+    this.$store.dispatch('LOAD_GROUPS')
   },
   components: {
     groupNavigationItem,

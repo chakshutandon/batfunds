@@ -4,7 +4,7 @@
       <v-flex align-start xs12>
         <groupDetail></groupDetail>
       </v-flex>
-      <speedDial></speedDial>
+       <speedDial></speedDial> 
     </v-layout>
   </v-container>
 </template>

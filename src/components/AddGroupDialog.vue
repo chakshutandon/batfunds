@@ -55,9 +55,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { EventBus } from '../event-bus';
-
 export default {
   data() {
     return {
@@ -67,13 +64,8 @@ export default {
   methods: {
     addGroup() {
       if (!this.groupName || !this.groupDesc) return;
-      axios.post('http://batfunds.herokuapp.com/api/groups', {
-        name: this.groupName,
-        desc: this.groupDesc,
-      }).then(() => {
-        EventBus.$emit('updateNavigation');
-        this.$emit('close');
-      });
+      this.$store.dispatch('CREATE_GROUP', {name: this.groupName, desc: this.groupDesc})
+      this.$emit('close');
     },
   },
   props: [

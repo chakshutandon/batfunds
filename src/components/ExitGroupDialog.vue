@@ -14,7 +14,7 @@
         <v-btn
           color="green darken-1"
           flat="flat"
-          @click.native="$emit('close')">
+          @click.native="deleteGroup">
           I Understand
         </v-btn>
       </v-card-actions>
@@ -27,6 +27,12 @@ export default {
   data() {
     return {
     };
+  },
+  methods: {
+    deleteGroup: function() {
+      this.$store.dispatch('DELETE_GROUP', this.$store.state.currentGroup.gid)
+      this.$emit('close');
+    }
   },
   props: [
     'show',

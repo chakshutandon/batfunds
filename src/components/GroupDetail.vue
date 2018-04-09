@@ -1,11 +1,11 @@
 <template>
-  <div v-if="isVisible">
-  <h1 class="title">{{ group.name }}</h1>
-  <h3 class="caption mt-2">{{ group.description }}</h3>
+  <div>
+  <h1 class="title">{{ currentGroup.name }}</h1>
+  <h3 class="caption mt-2">{{ currentGroup.description }}</h3>
   <personChip
-    v-for="user in users"
-    :key="user.name"
-    :person="user"
+    v-for="member in members"
+    :key="member.name"
+    :person="member"
     class="mt-4 mb-3 mr-3">
   </personChip>
   <v-data-table
@@ -25,13 +25,8 @@ import personChip from '@/components/PersonChip';
 export default {
   data() {
     return {
-      isVisible: false,
       group: {},
-      users: [
-        { name: 'Yugant' },
-        { name: 'Neel' },
-        { name: 'Chakshu' },
-      ],
+
       headers: [
         { text: 'Requested By', align: 'left', value: 'name', sortable: false },
         { text: 'Amount' },
@@ -43,13 +38,15 @@ export default {
       ],
     };
   },
-  mounted() {
-    EventBus.$on('updateGroupDetail', (group) => {
-      if (group) {
-        this.isVisible = true;
-        this.group = group;
-      }
-    });
+  computed: {
+    currentGroup() {
+      return this.$store.state.currentGroup
+    },
+    members() {
+      return this.$store.state.members
+    },
+  },
+  mounted: function() {
   },
   components: {
     personChip,

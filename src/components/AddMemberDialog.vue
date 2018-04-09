@@ -13,7 +13,7 @@
           </v-flex>
           <v-flex xs11>
             <v-card-text>
-              <v-text-field label="Email/Username" required></v-text-field>
+              <v-text-field v-model="username" label="Email/Username" required></v-text-field>
             </v-card-text>
           </v-flex>
         </v-layout>
@@ -28,7 +28,7 @@
           <v-btn
             color="green darken-1"
             flat="flat"
-            @click.native="$emit('close')">
+            @click.native="addMember">
               Submit
           </v-btn>
         </v-card-actions>
@@ -42,6 +42,13 @@ export default {
   data() {
     return {
     };
+  },
+  methods: {
+    addMember: function() {
+      var params = {group: this.$store.state.currentGroup, username: this.username}
+      this.$store.dispatch('ADD_MEMBER_TO_GROUP', params)
+      this.$emit('close');
+    }
   },
   props: [
     'show',

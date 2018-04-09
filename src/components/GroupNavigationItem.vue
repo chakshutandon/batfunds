@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import { EventBus } from '../event-bus';
 
 export default {
   data() {
@@ -23,7 +22,8 @@ export default {
   },
   methods: {
     updateGroupDetail() {
-      EventBus.$emit('updateGroupDetail', this.group);
+      this.$store.dispatch('SET_CURRENT_GROUP', this.group)
+      this.$store.dispatch('LOAD_MEMBERS', this.group)
     },
   },
   props: [
