@@ -76,7 +76,7 @@ module.exports = function(router, dbClass) {
 
             var uid = "00529a96-e599-3fba-8424-2f7243abd6cc"
 
-            dbClass.users.findAll({
+            dbClass.users.find({
                 where: {
                     uid: uid
                 }
@@ -160,7 +160,7 @@ module.exports = function(router, dbClass) {
                 }
             }).then((usergroup) => {
                 if(!usergroup) {
-                    res.status(404).json({success: 0, error: "Error finding group."});
+                    res.status(404).json({success: 0, error: "Must be member of group to add users."});
                     return;
                 }
                 dbClass.users.find({
@@ -342,5 +342,29 @@ module.exports = function(router, dbClass) {
                 res.status(500).json({success: 0, error: "Database Error: " + err});
                 console.log(err)
             })
+        })
+
+    router.route('/payers/:pid')
+        .get(function(req, res) {
+            if (!req.user) {
+                res.redirect('/login');
+                return;
+            }
+            var uid = req.user.dataValues.uid;
+            var pid = req.params.pid
+            dbClass.payers.findAll({
+                where: {
+                    pid: pid,
+                }
+            }).then((payers) => {
+                if(!payers || payers.length == 0) {
+                    res.status(404).json({success: 0, error: "Error finding payers."});
+                    return;
+                }
+                res.json({success: 1, payers: payers});
+            }).catch(dbClass.Sequelize.DatabaseError, (err) => {
+                res.status(400).send("Database Error: " + err)
+                console.log(err)
+            });
         })
 }
