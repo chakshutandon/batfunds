@@ -231,16 +231,15 @@ module.exports = function(router, dbClass) {
             //     return;
             // }
             var gid = req.body.gid;
-            var payee = req.user.dataValues.uid;
             var amount = req.body.amount;
             var due = req.body.due;
-            if(gid === undefined || payee === undefined || amount === undefined || due === undefined) {
+            if(gid === undefined || uid === undefined || amount === undefined || due === undefined) {
                 res.status(400).json({success: 0, error: "Invalid Request"});
                 return;
             }
             dbClass.usersgroups.find({
                 where: {
-                    uid: payee,
+                    uid: uid,
                     gid: gid
                 }
             }).then((usergroup) => {
