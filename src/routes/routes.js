@@ -23,7 +23,7 @@ module.exports = function(path, app, dbClass, passport, router) {
     require('./appRoutes.js')(router, dbClass)
 
     app.get('/app', isLoggedIn, function(req, res) {
-        res.sendFile(path.join(__dirname + '/../views/app.html'))
+        res.sendFile(path.join(__dirname + '/../public/app.html'))
     })
 
 }
