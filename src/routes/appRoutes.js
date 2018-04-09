@@ -1,3 +1,5 @@
+var uid = "00529a96-e599-3fba-8424-2f7243abd6cc";
+
 module.exports = function(router, dbClass) {
     router.route('/groups/:groupId')
         .get(function(req, res) {
@@ -17,12 +19,12 @@ module.exports = function(router, dbClass) {
 
     router.route('/groups/')         // Whoever creates the group is also in it... get this from req.user DONE
         .post(function(req, res) {
-            var uid;
-            if (req.user) uid = req.user.dataValues.uid;
-            else {
-                res.redirect('/login');
-                return;
-            }
+            // var uid;
+            // if (req.user) uid = req.user.dataValues.uid;
+            // else {
+            //     res.redirect('/login');
+            //     return;
+            // }
             var name = req.body.name;
             var desc = req.body.desc;
             if(name === undefined || desc === undefined) {
@@ -74,8 +76,11 @@ module.exports = function(router, dbClass) {
             // if (req.user) var uid = req.user.dataValues.uid;                                    // only allowed to see your own groups. Check if logged in.
             // else res.redirect('/login')
 
+<<<<<<< HEAD
             var uid = "00529a96-e599-3fba-8424-2f7243abd6cc"
 
+=======
+>>>>>>> 596188b271df4f6e6d6946c8ad84cbfa9edd7660
             dbClass.users.find({
                 where: {
                     uid: uid
@@ -99,12 +104,12 @@ module.exports = function(router, dbClass) {
     router.route('/groups/:groupId/users/')
         .get(function(req, res) {
             res.setHeader('Content-Type', 'application/json');
-            var uid;
-            if (req.user) uid = req.user.dataValues.uid;
-            else {
-                res.redirect('/login');
-                return;
-            }
+            // var uid;
+            // if (req.user) uid = req.user.dataValues.uid;
+            // else {
+            //     res.redirect('/login');
+            //     return;
+            // }
             var usergroup = dbClass.usersgroups.find({
                 where: {
                     uid: uid,
@@ -147,12 +152,12 @@ module.exports = function(router, dbClass) {
                 res.status(400).json({success: 0, error: "Invalid Request"});
                 return;
             }
-            var uid;
-            if (req.user) uid = req.user.dataValues.uid;
-            else {
-                res.redirect('/login');
-                return;
-            }
+            // var uid;
+            // if (req.user) uid = req.user.dataValues.uid;
+            // else {
+            //     res.redirect('/login');
+            //     return;
+            // }
             dbClass.usersgroups.find({
                 where: {
                     uid: uid,
@@ -186,22 +191,21 @@ module.exports = function(router, dbClass) {
             })
         });
 
-    router.route('/groups/member/:userId/:groupId')
+    router.route('/groups/member/:groupId')
         .delete(function(req, res) {                              // only allowed for groups you are in.
-            var userId = req.params.userId;
+            // if (req.user) uid = req.user.dataValues.uid;
+            // else {
+            //     res.redirect('/login');
+            //     return;
+            // }
             var groupId = req.params.groupId;
-            if(userId === undefined || groupId === undefined) {
+            if (groupId === undefined) {
                 res.status(400).json({success: 0, error: "Invalid Request"});
-                return;
-            }
-            if (req.user) uid = req.user.dataValues.uid;
-            else {
-                res.redirect('/login');
                 return;
             }
             dbClass.usersgroups.find({
                 where: {
-                    uid: userId,
+                    uid: uid,
                     gid: groupId
                 }
             }).then((usergroup) => {
@@ -211,11 +215,11 @@ module.exports = function(router, dbClass) {
                 }
                 dbClass.usersgroups.destroy({
                     where: {
-                        uid : userId,
+                        uid : uid,
                         gid : groupId
                     }
                 }).then(() => {
-                    res.status(200).json({success: 1, message: "Successfully removed " + userId + " from group " + groupId});
+                    res.status(200).json({success: 1, message: "Successfully removed " + uid + " from group " + groupId});
                 })
             })
             .catch(dbClass.Sequelize.DatabaseError, (err) => {
