@@ -267,11 +267,11 @@ module.exports = function(router, dbClass) {
     
     router.route('/paymentflags/:gid')
         .get(function(req, res) {
-            if (!req.user) {
-                res.redirect('/login');
-                return;
-            }
-            var uid = req.user.dataValues.uid;
+            // if (req.user) uid = req.user.dataValues.uid;
+            // else {
+            //     res.redirect('/login');
+            //     return;
+            // }
             var gid = req.params.gid
             dbClass.usersgroups.findAll({
                 where: {
