@@ -306,7 +306,7 @@ module.exports = function(router, dbClass) {
                 res.redirect('/login');
                 return;
             }
-            var uid = req.user.dataValues.uid;
+
             var payer = req.body.uid;
             var pid = req.body.pid;
             var amount = req.body.amount;
