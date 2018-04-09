@@ -225,10 +225,11 @@ module.exports = function(router, dbClass) {
 
     router.route('/raisepayment')
         .post(function(req, res) {
-            if (!req.user) {
-                res.redirect('/login');
-                return;
-            }
+            // if (req.user) uid = req.user.dataValues.uid;
+            // else {
+            //     res.redirect('/login');
+            //     return;
+            // }
             var gid = req.body.gid;
             var payee = req.user.dataValues.uid;
             var amount = req.body.amount;
