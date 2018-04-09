@@ -289,7 +289,7 @@ module.exports = function(router, dbClass) {
                     }
                 }).then((pf) => {
                     if(!pf) {
-                        res.status(404).json({success: 0, error: "Error finding payment flags"});
+                        res.status(200).json({success: 0, error: "Error finding payment flags"});
                         return;
                     }
                     res.json({success: 1, paymentflags: pf});
