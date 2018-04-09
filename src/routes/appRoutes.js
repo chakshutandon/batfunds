@@ -222,5 +222,125 @@ module.exports = function(router, dbClass) {
                 res.status(500).json({success: 0, error: "Database Error: " + err});
                 console.log(err)
             })
-    });
+        });
+
+    router.route('/raisepayment')
+        .post(function(req, res) {
+            if (!req.user) {
+                res.redirect('/login');
+                return;
+            }
+            var gid = req.body.gid;
+            var payee = req.user.dataValues.uid;
+            var amount = req.body.amount;
+            var due = req.body.due;
+            if(gid === undefined || payee === undefined || amount === undefined || due === undefined) {
+                res.status(400).json({success: 0, error: "Invalid Request"});
+                return;
+            }
+            dbClass.usersgroups.find({
+                where: {
+                    uid: payee,
+                    gid: gid
+                }
+            }).then((usergroup) => {
+                if(!usergroup) {
+                    res.status(404).json({success: 0, error: "Error finding group."});
+                    return;
+                }
+                dbClass.paymentflags.create({
+                    gid: gid,
+                    payee: payee,
+                    amount: amount,
+                    due: due
+                }).then(() => {
+                    console.log("Created payment flag: payee: " + payee + ", amount: " + amount)
+                    res.sendStatus(201);
+                }).catch(dbClass.Sequelize.DatabaseError, (err) => {
+                    res.status(400).send("Database Error: " + err)
+                    console.log(err)
+                });
+            }).catch(dbClass.Sequelize.DatabaseError, (err) => {
+                res.status(500).json({success: 0, error: "Database Error: " + err});
+                console.log(err)
+            })
+        })
+    
+    router.route('/paymentflags/:gid')
+        .get(function(req, res) {
+            if (!req.user) {
+                res.redirect('/login');
+                return;
+            }
+            var uid = req.user.dataValues.uid;
+            var gid = req.params.gid
+            dbClass.usersgroups.findAll({
+                where: {
+                    uid: uid,
+                    gid: gid
+                }
+            }).then((usergroup) => {
+                if(!usergroup) {
+                    res.status(404).json({success: 0, error: "Error finding group."});
+                    return;
+                }
+                dbClass.paymentflags.findAll({
+                    where: {
+                        gid: gid
+                    }
+                }).then((pf) => {
+                    if(!pf) {
+                        res.status(404).json({success: 0, error: "Error finding payment flags"});
+                        return;
+                    }
+                    res.json({success: 1, paymentflags: pf});
+                })
+            }).catch(dbClass.Sequelize.DatabaseError, (err) => {
+                res.status(400).send("Database Error: " + err)
+                console.log(err)
+            });
+        })
+
+    router.route('/payers')
+        .post(function(req, res) {
+            if (!req.user) {
+                res.redirect('/login');
+                return;
+            }
+            var uid = req.user.dataValues.uid;
+            var payer = req.body.uid;
+            var pid = req.body.pid;
+            var amount = req.body.amount;
+            if(pid === undefined || amount === undefined) {
+                res.status(400).json({success: 0, error: "Invalid Request"});
+                return;
+            }
+            dbClass.paymentflags.find({
+                where: {
+                    pid: pid,
+                    payee: uid
+                }
+            }).then((paymentflag) => {
+                if(!paymentflag) {
+                    res.status(404).json({success: 0, error: "Error finding payment flag."});
+                    return;
+                }
+                dbClass.payers.create({
+                    uid: payer,
+                    gid: paymentflag.gid,
+                    pid: pid,
+                    amount: amount,
+                    status: "Unpaid"
+                }).then(() => {
+                    console.log("Added payer: " + payer + " to payment flag: " + pid + ", amount: " + amount)
+                    res.sendStatus(201);
+                }).catch(dbClass.Sequelize.DatabaseError, (err) => {
+                    res.status(400).send("Database Error: " + err)
+                    console.log(err)
+                });
+            }).catch(dbClass.Sequelize.DatabaseError, (err) => {
+                res.status(500).json({success: 0, error: "Database Error: " + err});
+                console.log(err)
+            })
+        })
 }
