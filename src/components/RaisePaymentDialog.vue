@@ -3,8 +3,6 @@
     <v-card>
       <v-card-title class="headline">Request Payment</v-card-title>
         <v-card-text>
-          <v-subheader>Recurring</v-subheader>
-          <v-switch class="ml-3" v-model="recurring"></v-switch>
           <v-subheader>Amount</v-subheader>
           <v-layout row>
             <v-flex xs9>
@@ -28,7 +26,6 @@
             label="Members"
             autocomplete></v-select>
           </v-card-text>
-           <v-chip close>John Maxwell</v-chip>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -41,7 +38,7 @@
           <v-btn
             color="green darken-1"
             flat="flat"
-            @click.native="$emit('close')">
+            @click.native="raisepayment">
               Submit
           </v-btn>
         </v-card-actions>
@@ -56,6 +53,13 @@ export default {
       value: 10,
       recurring: false,
     };
+  },
+  methods: {
+    raisepayment: function () {
+      var params = {gid: this.$store.state.currentGroup.gid, amount: this.value}
+      this.$store.dispatch('CREATE_PAYMENT_FLAG', params)
+      this.$emit('close');
+    }
   },
   props: [
     'show',

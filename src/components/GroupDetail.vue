@@ -10,31 +10,24 @@
   </personChip>
   <v-data-table
     :headers="headers"
-    :items="items"
+    :items="paymentFlags"
     hide-actions
     class="elevation-1">
-
   </v-data-table>
   </div>
 </template>
 
 <script>
-import { EventBus } from '../event-bus';
 import personChip from '@/components/PersonChip';
 
 export default {
   data() {
     return {
-      group: {},
-
       headers: [
         { text: 'Requested By', align: 'left', value: 'name', sortable: false },
         { text: 'Amount' },
         { text: 'Recurring' },
         { text: 'Actions', sortable: false },
-      ],
-      items: [
-        {},
       ],
     };
   },

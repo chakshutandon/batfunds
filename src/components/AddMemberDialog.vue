@@ -46,7 +46,7 @@ export default {
   methods: {
     addMember: function() {
       var params = {group: this.$store.state.currentGroup, username: this.username}
-      this.$store.dispatch('ADD_MEMBER_TO_GROUP', params)
+      this.$store.dispatch('CREATE_PAYMENT_FLAG', params)
       this.$emit('close');
     }
   },

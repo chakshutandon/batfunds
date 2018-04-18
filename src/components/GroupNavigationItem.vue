@@ -24,6 +24,7 @@ export default {
     updateGroupDetail() {
       this.$store.dispatch('SET_CURRENT_GROUP', this.group)
       this.$store.dispatch('LOAD_MEMBERS', this.group)
+      this.$store.dispatch('LOAD_PAYMENT_FLAGS', this.group.gid)
     },
   },
   props: [

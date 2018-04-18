@@ -11,6 +11,7 @@ export const store = new Vuex.Store({
         groups: [],
         members: [],
         currentGroup: {},
+        paymentFlags: [],
     },
     actions: {
         LOAD_GROUPS: (context) => {
@@ -50,6 +51,24 @@ export const store = new Vuex.Store({
                 console.log(err)
             }
         },
+        LOAD_PAYMENT_FLAGS: (context, gid) => {
+            axios.get(`${base_url}/api/paymentflags/${gid}`).then((response) => {
+                context.commit('LOAD_PAYMENT_FLAGS', response.data)
+            }), (err) => {
+                console.log(err)
+            }
+        },
+        CREATE_PAYMENT_FLAG: (context, params) => {
+            axios.post(`${base_url}/api/raisepayment`, {
+                gid: params.gid,
+                amount: params.amount,
+                due: '2019-01-01'
+            }).then((response) => {
+                
+            }), (err) => {
+                console.log(err)
+            }
+        },
         DELETE_GROUP: (context, gid) => {
             axios.delete(`${base_url}/api/groups/member/${gid}`).then((response) => {
                 context.dispatch('LOAD_GROUPS')
@@ -68,7 +87,9 @@ export const store = new Vuex.Store({
         },
         SET_CURRENT_GROUP: (state, group) => {
             state.currentGroup = group;
-            console.log(group);
+        },
+        LOAD_PAYMENT_FLAGS: (state, flags) => {
+            state.paymentFlags = flags;
         },
     },
 })
