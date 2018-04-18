@@ -302,13 +302,22 @@ module.exports = function(router, dbClass) {
                 dbClass.paymentflags.findAll({
                     where: {
                         gid: gid
-                    }
+                    },
+                    raw: true
                 }).then((pf) => {
                     if(!pf) {
                         res.status(200).json({success: 0, error: "Error finding payment flags"});
                         return;
                     }
-                    res.json({success: 1, paymentflags: pf});
+                    var userId = pf[0].payee
+                    dbClass.users.find({
+                        where: {
+                            uid: userId
+                        },
+                        attributes: ['username']
+                    }).then((user) => {
+                        res.json({success: 1, paymentflags: user});
+                    });
                 })
             }).catch(dbClass.Sequelize.DatabaseError, (err) => {
                 res.status(400).send("Database Error: " + err)
