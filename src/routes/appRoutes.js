@@ -303,21 +303,18 @@ module.exports = function(router, dbClass) {
                     where: {
                         gid: gid
                     },
-                    raw: true
+                    include: [
+                        {
+                            model: dbClass.users,
+                            attributes: ['username']
+                        }
+                    ]
                 }).then((pf) => {
                     if(!pf) {
                         res.status(200).json({success: 0, error: "Error finding payment flags"});
                         return;
                     }
-                    var userId = pf[0].payee
-                    dbClass.users.find({
-                        where: {
-                            uid: userId
-                        },
-                        attributes: ['username']
-                    }).then((user) => {
-                        res.json({success: 1, paymentflags: user});
-                    });
+                    res.json({success: 1, paymentflags: pf});
                 })
             }).catch(dbClass.Sequelize.DatabaseError, (err) => {
                 res.status(400).send("Database Error: " + err)
@@ -399,4 +396,44 @@ module.exports = function(router, dbClass) {
                 console.log(err)
             });
         })
+
+    router.route('/groups/member/:groupId')
+        .delete(function(req, res) {
+            if (req.user) uid = req.user.dataValues.uid;
+            else {
+		if (production) {
+                        res.redirect('/login')
+                        return
+                }
+                uid = testUID
+            }
+            var groupId = req.params.groupId;
+            if (groupId === undefined) {
+                res.status(400).json({success: 0, error: "Invalid Request"});
+                return;
+            }
+            dbClass.usersgroups.find({
+                where: {
+                    uid: uid,
+                    gid: groupId
+                }
+            }).then((usergroup) => {
+                if(!usergroup) {
+                    res.status(404).json({success: 0, error: "Error finding group."});
+                    return;
+                }
+                dbClass.usersgroups.destroy({
+                    where: {
+                        uid : uid,
+                        gid : groupId
+                    }
+                }).then(() => {
+                    res.status(200).json({success: 1, message: "Successfully removed " + uid + " from group " + groupId});
+                })
+            })
+            .catch(dbClass.Sequelize.DatabaseError, (err) => {
+                res.status(500).json({success: 0, error: "Database Error: " + err});
+                console.log(err)
+            })
+        });
 }
