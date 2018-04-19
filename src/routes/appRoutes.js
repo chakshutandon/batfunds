@@ -247,6 +247,7 @@ module.exports = function(router, dbClass) {
             var gid = req.body.gid;
             var amount = req.body.amount;
             var due = req.body.due;
+            var description = req.body.description;
             if(gid === undefined || amount === undefined || due === undefined) {
                 res.status(400).json({success: 0, error: "Invalid Request"});
                 return;
@@ -265,7 +266,8 @@ module.exports = function(router, dbClass) {
                     gid: gid,
                     payee: uid,
                     amount: amount,
-                    due: due
+                    due: due,
+                    description: description
                 }).then(() => {
                     console.log("Created payment flag: payee: " + uid + ", amount: " + amount)
                     res.sendStatus(201);
@@ -302,7 +304,13 @@ module.exports = function(router, dbClass) {
                 dbClass.paymentflags.findAll({
                     where: {
                         gid: gid
-                    }
+                    },
+                    include: [
+                        {
+                            model: dbClass.users,
+                            attributes: ['username']
+                        }
+                    ]
                 }).then((pf) => {
                     if(!pf) {
                         res.status(200).json({success: 0, error: "Error finding payment flags"});
@@ -390,4 +398,43 @@ module.exports = function(router, dbClass) {
                 console.log(err)
             });
         })
+
+    router.route('/paymentflags/:pid')
+        .delete(function(req, res) {
+            if (req.user) uid = req.user.dataValues.uid;
+            else {
+		        if (production) {
+                    res.redirect('/login')
+                    return
+                }
+                uid = testUID
+            }
+            var pid = req.params.pid;
+            if (pid === undefined) {
+                res.status(400).json({success: 0, error: "Invalid Request"});
+                return;
+            }
+            dbClass.paymentflags.find({
+                where: {
+                    pid: pid,
+                    payee: uid
+                }
+            }).then((pf) => {
+                if(!pf) {
+                    res.status(404).json({success: 0, error: "Error finding payment flag."});
+                    return;
+                }
+                dbClass.paymentflags.destroy({
+                    where: {
+                        pid : pid
+                    }
+                }).then(() => {
+                    res.status(200).json({success: 1, message: "Successfully removed payment flag" + pid});
+                })
+            })
+            .catch(dbClass.Sequelize.DatabaseError, (err) => {
+                res.status(500).json({success: 0, error: "Database Error: " + err});
+                console.log(err)
+            })
+        });
 }
