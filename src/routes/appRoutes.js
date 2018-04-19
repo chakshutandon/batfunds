@@ -417,7 +417,7 @@ module.exports = function(router, dbClass) {
             dbClass.paymentflags.find({
                 where: {
                     pid: pid,
-                    uid: uid
+                    payee: uid
                 }
             }).then((pf) => {
                 if(!pf) {
