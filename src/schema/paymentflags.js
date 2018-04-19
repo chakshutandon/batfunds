@@ -16,6 +16,7 @@ module.exports = function(db, Sequelize) {
       primaryKey: true
     },
     amount: Sequelize.DECIMAL(8,2),
-    due: Sequelize.DATE
+    due: Sequelize.DATE,
+    description: Sequelize.STRING
   })
 }

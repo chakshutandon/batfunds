@@ -247,6 +247,7 @@ module.exports = function(router, dbClass) {
             var gid = req.body.gid;
             var amount = req.body.amount;
             var due = req.body.due;
+            var description = req.body.description;
             if(gid === undefined || amount === undefined || due === undefined) {
                 res.status(400).json({success: 0, error: "Invalid Request"});
                 return;
@@ -265,7 +266,8 @@ module.exports = function(router, dbClass) {
                     gid: gid,
                     payee: uid,
                     amount: amount,
-                    due: due
+                    due: due,
+                    description: description
                 }).then(() => {
                     console.log("Created payment flag: payee: " + uid + ", amount: " + amount)
                     res.sendStatus(201);
@@ -397,38 +399,37 @@ module.exports = function(router, dbClass) {
             });
         })
 
-    router.route('/groups/member/:groupId')
+    router.route('/paymentflags/:pid')
         .delete(function(req, res) {
             if (req.user) uid = req.user.dataValues.uid;
             else {
-		if (production) {
-                        res.redirect('/login')
-                        return
+		        if (production) {
+                    res.redirect('/login')
+                    return
                 }
                 uid = testUID
             }
-            var groupId = req.params.groupId;
-            if (groupId === undefined) {
+            var pid = req.params.pid;
+            if (pid === undefined) {
                 res.status(400).json({success: 0, error: "Invalid Request"});
                 return;
             }
-            dbClass.usersgroups.find({
+            dbClass.paymentflags.find({
                 where: {
-                    uid: uid,
-                    gid: groupId
+                    pid: pid,
+                    uid: uid
                 }
-            }).then((usergroup) => {
-                if(!usergroup) {
-                    res.status(404).json({success: 0, error: "Error finding group."});
+            }).then((pf) => {
+                if(!pf) {
+                    res.status(404).json({success: 0, error: "Error finding payment flag."});
                     return;
                 }
-                dbClass.usersgroups.destroy({
+                dbClass.pf.destroy({
                     where: {
-                        uid : uid,
-                        gid : groupId
+                        pid : pid
                     }
                 }).then(() => {
-                    res.status(200).json({success: 1, message: "Successfully removed " + uid + " from group " + groupId});
+                    res.status(200).json({success: 1, message: "Successfully removed payment flag" + pid + " from group " + groupId});
                 })
             })
             .catch(dbClass.Sequelize.DatabaseError, (err) => {
