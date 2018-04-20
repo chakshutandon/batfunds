@@ -1,5 +1,5 @@
 testUID = "bff00de0-39e3-11e8-8ddf-49e46dbf263a"
-production = 0
+production = 1
 
 module.exports = function(router, dbClass) {
     router.route('/groups/:groupId')

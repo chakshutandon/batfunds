@@ -1,4 +1,4 @@
-const production = 0
+const production = 1
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) return next()
