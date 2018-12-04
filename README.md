@@ -1,6 +1,6 @@
 # batfunds
 
-> A group payment app designed for simplicity and no hassels.
+> A group payment app designed for simplicity.
 
 ## Build Setup
 
